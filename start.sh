@@ -6,5 +6,6 @@ then
     curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 fi
 
-# Chạy server với gunicorn
-gunicorn -b 0.0.0.0:10000 Server:app
+# Chạy server với gunicorn, lấy PORT từ biến môi trường
+gunicorn -b 0.0.0.0:$PORT Server:app
+
