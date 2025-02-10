@@ -30,6 +30,15 @@ def compile_arduino():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# 📂 Route mới: Lấy danh sách file .hex trong thư mục hiện tại
+@app.route('/files', methods=['GET'])
+def list_files():
+    try:
+        hex_files = [f for f in os.listdir('.') if f.endswith('.hex')]
+        return jsonify({"files": hex_files})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
    port = int(os.environ.get("PORT", 5000))  # Lấy PORT từ biến môi trường, mặc định là 5000
    app.run(host='0.0.0.0', port=port)
