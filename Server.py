@@ -3,7 +3,11 @@ import subprocess
 import os
 
 app = Flask(__name__)
-
+@app.route('/', methods=['GET'])
+def debug_info():
+    return jsonify({
+        "log":"server is live✔️"
+    })
 @app.route('/compile', methods=['POST'])
 def compile_arduino():
     try:
@@ -43,6 +47,13 @@ def compile_arduino():
     except Exception as e:
         print("Exception:", str(e))
         return jsonify({"error": str(e)}), 500
+        
+@app.route('/debug', methods=['GET'])
+def debug_info():
+    return jsonify({
+        "path": os.environ.get("PATH"),
+        "arduino_cli_version": os.popen("/opt/render/project/src/bin/arduino-cli version").read(),
+    })
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
