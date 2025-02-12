@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 @app.route('/', methods=['GET'])
-def debug_info():
+def debug_status():
     return jsonify({
         "log":"server is live✔️"
     })
