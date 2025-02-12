@@ -30,9 +30,10 @@ def compile_arduino():
 
         # Gọi lệnh biên dịch
         result = subprocess.run(
-            ["arduino-cli", "compile", "--fqbn", "arduino:avr:uno", "temp.ino"],
-            capture_output=True, text=True
+        ["/opt/render/project/src/bin/arduino-cli", "compile", "--fqbn", "arduino:avr:uno", "temp.ino"],
+        capture_output=True, text=True
         )
+
 
         # In ra log lệnh biên dịch
         print("Return code:", result.returncode)
