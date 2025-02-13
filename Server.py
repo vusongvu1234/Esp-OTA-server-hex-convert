@@ -3,11 +3,17 @@ import subprocess
 import os
 
 app = Flask(__name__)
-@app.route('/', methods=['GET'])
-def debug_status():
-    return jsonify({
-        "log": "Server is live"
-    })
+@app.route('/')
+def home():
+    return "🚀 Arduino OTA Server Đang Chạy!"
+
+app.route('/files', methods=['GET'])
+def list_files():
+    try:
+        hex_files = [f for f in os.listdir('.') if f.endswith('.hex')]
+        return jsonify({"files": hex_files})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 @app.route('/compile', methods=['POST'])
 def compile_arduino():
     try:
