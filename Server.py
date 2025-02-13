@@ -30,21 +30,28 @@ def compile_arduino():
             return jsonify({"error": "Không có mã Arduino nào được gửi!"}), 400
 
         # Ghi mã Arduino vào file
-        with open("temp.ino", "w") as f:
-            f.write(code)
-        print("Đã lưu file temp.ino")
+        sketch_dir = "temp"
+        if not os.path.exists(sketch_dir):
+          os.makedirs(sketch_dir)
 
-        # Gọi lệnh biên dịch
-        result = subprocess.run(
-        ["/opt/render/project/src/bin/arduino-cli", "compile", "--fqbn", "arduino:avr:uno", "temp.ino"],
-        capture_output=True, text=True
-        )
+file_path = os.path.join(sketch_dir, "temp.ino")
 
+# Ghi mã Arduino vào file trong thư mục
+with open(file_path, "w") as f:
+    f.write(code)
 
-        # In ra log lệnh biên dịch
-        print("Return code:", result.returncode)
-        print("Stdout:", result.stdout)
-        print("Stderr:", result.stderr)
+print(f"✅ Đã lưu file {file_path}")
+
+# Gọi lệnh biên dịch
+result = subprocess.run(
+    ["/opt/render/project/src/bin/arduino-cli", "compile", 
+     "--fqbn", "arduino:avr:uno", sketch_dir], 
+    capture_output=True, text=True
+)
+
+print("Return code:", result.returncode)
+print("Stdout:", result.stdout)
+print("Stderr:", result.stderr)
 
         if result.returncode != 0:
             return jsonify({"error": result.stderr}), 500
