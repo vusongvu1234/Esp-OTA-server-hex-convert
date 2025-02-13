@@ -7,7 +7,7 @@ app = Flask(__name__)
 def home():
     return "🚀 Arduino OTA Server Đang Chạy!"
 
-app.route('/files', methods=['GET'])
+@app.route('/files', methods=['GET'])
 def list_files():
     try:
         hex_files = [f for f in os.listdir('.') if f.endswith('.hex')]
