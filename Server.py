@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def debug_status():
     return jsonify({
-        "log": "Server đang chạy bình thường🥇🎉🎊"
+        "log": "Server is live"
     })
 @app.route('/compile', methods=['POST'])
 def compile_arduino():
