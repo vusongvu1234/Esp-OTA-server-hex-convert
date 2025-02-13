@@ -1,5 +1,7 @@
 #!/bin/bash
 # Cài đặt arduino-cli nếu chưa có
+export PATH="/opt/render/project/src/bin:$PATH"
+
 if ! command -v arduino-cli &> /dev/null
 then
     echo "Installing arduino-cli..."
