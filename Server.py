@@ -28,7 +28,7 @@ def compile_arduino():
             
         if not code:
             return jsonify({"error": "Không có mã Arduino nào được gửi!"}), 400
-
+        print("Checking if src.ino exists:", os.path.exists("src.ino"))
         # Ghi mã Arduino vào file
         sketch_dir = "temp"
         if not os.path.exists(sketch_dir):
@@ -40,12 +40,11 @@ file_path = os.path.join(sketch_dir, "temp.ino")
 with open(file_path, "w") as f:
     f.write(code)
 
+
 print(f"✅ Đã lưu file {file_path}")
 
-# Gọi lệnh biên dịch
 result = subprocess.run(
-    ["/opt/render/project/src/bin/arduino-cli", "compile", 
-     "--fqbn", "arduino:avr:uno", sketch_dir], 
+    ["/opt/render/project/src/bin/arduino-cli", "compile", "--fqbn", "arduino:avr:uno", "/opt/render/project/src/src.ino"],
     capture_output=True, text=True
 )
 
