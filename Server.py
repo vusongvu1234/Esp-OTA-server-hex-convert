@@ -31,17 +31,15 @@ def compile_arduino():
         if not code:
             return jsonify({"error": "Không có mã Arduino nào được gửi!"}), 400
 
-        # Tạo thư mục temp nếu chưa có
-        sketch_dir = "temp"
+        #sketch_dir = "/opt/render/project/src/temp"  # Thư mục đầy đủ
         if not os.path.exists(sketch_dir):
             os.makedirs(sketch_dir)
 
-        # Đường dẫn đầy đủ đến file .ino
-        file_path = os.path.join(sketch_dir, "src.ino")
+        file_path = os.path.join(sketch_dir, "temp.ino")
 
-        # Ghi mã Arduino vào file
         with open(file_path, "w") as f:
-            f.write(code)
+             f.write(code)
+
 
         print(f"✅ Đã lưu file {file_path}")
 
