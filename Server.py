@@ -15,7 +15,7 @@ def list_files():
         return jsonify({"files": hex_files})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-@app.route('/install_avr', methods=['GET'])
+@app.route('/install_avr')
 def install_avr():
     try:
         cmd_update = "/opt/render/project/src/bin/arduino-cli core update-index"
