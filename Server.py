@@ -31,7 +31,7 @@ def compile_arduino():
         if not code:
             return jsonify({"error": "Không có mã Arduino nào được gửi!"}), 400
 
-        #sketch_dir = "/opt/render/project/src/temp"  # Thư mục đầy đủ
+        sketch_dir = "/opt/render/project/src/temp" 
         if not os.path.exists(sketch_dir):
             os.makedirs(sketch_dir)
 
