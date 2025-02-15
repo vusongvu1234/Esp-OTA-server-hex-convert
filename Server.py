@@ -15,6 +15,23 @@ def list_files():
         return jsonify({"files": hex_files})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+@app.route('/install_avr', methods=['GET'])
+def install_avr():
+    try:
+        cmd_update = "/opt/render/project/src/bin/arduino-cli core update-index"
+        cmd_install = "/opt/render/project/src/bin/arduino-cli core install arduino:avr"
+        
+        update_result = subprocess.run(cmd_update.split(), capture_output=True, text=True)
+        install_result = subprocess.run(cmd_install.split(), capture_output=True, text=True)
+
+        return jsonify({
+            "update_stdout": update_result.stdout,
+            "update_stderr": update_result.stderr,
+            "install_stdout": install_result.stdout,
+            "install_stderr": install_result.stderr
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/compile', methods=['POST'])
 def compile_arduino():
