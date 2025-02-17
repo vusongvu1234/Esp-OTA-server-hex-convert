@@ -3,10 +3,17 @@ import subprocess
 import os
 
 app = Flask(__name__)
-
 @app.route('/')
 def home():
-    return "🚀 Arduino OTA Server Đang Chạy!"
+	return "Server đang chạy🎉🎊🥇💵💸🏆💰"
+@app.route('/debug_avr')
+def avr_check():
+    check_core = subprocess.run(["/opt/render/project/src/bin/arduino-cli", "core", "list"], capture_output=True, text=True)
+
+    if "arduino:avr" not in check_core.stdout:
+        print("⚠️ Chưa có core arduino:avr. Đang cài đặt...")
+        install_core = subprocess.run(["/opt/render/project/src/bin/arduino-cli", "core", "install", "arduino:avr"], capture_output=True, text=True)
+        print("Core Install Output:", install_core.stdout)
 
 @app.route('/files', methods=['GET'])
 def list_files():
