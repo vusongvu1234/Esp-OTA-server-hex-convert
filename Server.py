@@ -10,10 +10,11 @@ def home():
 @app.route('/get_hex', methods=['GET'])
 def get_hex():
     sketch_dir = "/opt/render/project/src/temp"
-    hex_files = [f for f in os.listdir(build_dir) if f.endswith('.hex')]
+    build_dir = os.path.join(sketch_dir, "build")  # Thêm dòng này để chỉ định thư mục build
+    hex_files = [f for f in os.listdir(build_dir) if f.endswith('.hex')]  # Dùng build_dir ở đây
     if not hex_files:
         return jsonify({"error": "Biên dịch thành công nhưng không tìm thấy file .hex"}), 500
-    hex_file_path = os.path.join(sketch_dir, hex_files[0])
+    hex_file_path = os.path.join(build_dir, hex_files[0])  # Cập nhật đường dẫn
     return send_file(hex_file_path, as_attachment=True)
 
 @app.route('/debug_avr')
@@ -78,15 +79,15 @@ def compile_arduino():
         print(f"✅ Đã lưu file {file_path}")
 
         # Biên dịch bằng arduino-cli
+                # Biên dịch bằng arduino-cli
         build_dir = os.path.join(sketch_dir, "build")
         if not os.path.exists(build_dir):
              os.makedirs(build_dir)
 
-result = subprocess.run(
-    ["/opt/render/project/src/bin/arduino-cli", "compile", "--fqbn", "arduino:avr:uno", "--output-dir", build_dir, sketch_dir],
-    capture_output=True, text=True
-)
-
+        result = subprocess.run(
+            ["/opt/render/project/src/bin/arduino-cli", "compile", "--fqbn", "arduino:avr:uno", "--output-dir", build_dir, sketch_dir],
+            capture_output=True, text=True
+        )
 
         print("Return code:", result.returncode)
         print("Stdout:", result.stdout)
@@ -97,13 +98,13 @@ result = subprocess.run(
 
         # Tìm file .hex được tạo ra
         hex_files = [f for f in os.listdir(build_dir) if f.endswith('.hex')]
-]
         if not hex_files:
             return jsonify({"error": "Biên dịch thành công nhưng không tìm thấy file .hex"}), 500
 
-        hex_file_path = os.path.join(sketch_dir, hex_files[0])
+        hex_file_path = os.path.join(build_dir, hex_files[0])  # Đường dẫn đúng cho file .hex
 
         return jsonify({"message": "✅ Biên dịch thành công!", "hex_file": hex_file_path})
+
 
     except Exception as e:
         print("Exception:", str(e))
