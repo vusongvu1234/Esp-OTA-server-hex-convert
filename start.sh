@@ -1,13 +1,20 @@
 #!/bin/bash
-# Cài đặt arduino-cli nếu chưa có
-export PATH="/opt/render/project/src/bin:$PATH"
+set -e  # Dừng script nếu có lỗi
 
-if ! command -v arduino-cli &> /dev/null
-then
+echo "Current PATH: $PATH"
+
+# Kiểm tra và cài đặt arduino-cli nếu chưa có
+export PATH="/opt/render/project/src/bin:$PATH"
+if ! command -v arduino-cli &>/dev/null; then
     echo "Installing arduino-cli..."
     curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 fi
 
-# Chạy server với gunicorn, lấy PORT từ biến môi trường
-gunicorn -b 0.0.0.0:$PORT Server:app
+# Kiểm tra lại xem arduino-cli đã được cài đặt chưa
+if ! command -v arduino-cli &>/dev/null; then
+    echo "Error: arduino-cli installation failed!"
+    exit 1
+fi
 
+# Chạy server với gunicorn
+gunicorn -b 0.0.0.0:$PORT Server:app
