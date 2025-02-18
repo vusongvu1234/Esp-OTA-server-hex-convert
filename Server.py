@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask import send_file
 import subprocess
 import os
 
@@ -8,12 +9,13 @@ def home():
 	return "Server đang chạy🎉🎊🥇💵💸🏆💰"
 @app.route('/get_hex', methods=['GET'])
 def get_hex():
-    hex_files = [f for f in os.listdir(sketch_dir) if f.endswith('.hex')]
+    sketch_dir = "/opt/render/project/src/temp"
+    hex_files = [f for f in os.listdir(build_dir) if f.endswith('.hex')]
     if not hex_files:
         return jsonify({"error": "Biên dịch thành công nhưng không tìm thấy file .hex"}), 500
     hex_file_path = os.path.join(sketch_dir, hex_files[0])
-    hex_path = hex_file_path
-    return send_file(hex_path, as_attachment=True)
+    return send_file(hex_file_path, as_attachment=True)
+
 @app.route('/debug_avr')
 def avr_check():
     check_core = subprocess.run(["/opt/render/project/src/bin/arduino-cli", "core", "list"], capture_output=True, text=True)
@@ -76,10 +78,15 @@ def compile_arduino():
         print(f"✅ Đã lưu file {file_path}")
 
         # Biên dịch bằng arduino-cli
-        result = subprocess.run(
-            ["/opt/render/project/src/bin/arduino-cli", "compile", "--fqbn", "arduino:avr:uno", sketch_dir],
-            capture_output=True, text=True
-        )
+        build_dir = os.path.join(sketch_dir, "build")
+        if not os.path.exists(build_dir):
+             os.makedirs(build_dir)
+
+result = subprocess.run(
+    ["/opt/render/project/src/bin/arduino-cli", "compile", "--fqbn", "arduino:avr:uno", "--output-dir", build_dir, sketch_dir],
+    capture_output=True, text=True
+)
+
 
         print("Return code:", result.returncode)
         print("Stdout:", result.stdout)
@@ -89,7 +96,8 @@ def compile_arduino():
             return jsonify({"error": result.stderr}), 500
 
         # Tìm file .hex được tạo ra
-        hex_files = [f for f in os.listdir(sketch_dir) if f.endswith('.hex')]
+        hex_files = [f for f in os.listdir(build_dir) if f.endswith('.hex')]
+]
         if not hex_files:
             return jsonify({"error": "Biên dịch thành công nhưng không tìm thấy file .hex"}), 500
 
