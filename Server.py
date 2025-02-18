@@ -6,6 +6,10 @@ app = Flask(__name__)
 @app.route('/')
 def home():
 	return "Server đang chạy🎉🎊🥇💵💸🏆💰"
+@app.route('/get_hex', methods=['GET'])
+def get_hex():
+    hex_path = "/opt/render/project/src/build/arduino.avr.uno/firmware.hex"
+    return send_file(hex_path, as_attachment=True)
 @app.route('/debug_avr')
 def avr_check():
     check_core = subprocess.run(["/opt/render/project/src/bin/arduino-cli", "core", "list"], capture_output=True, text=True)
@@ -60,7 +64,7 @@ def compile_arduino():
             os.makedirs(sketch_dir)
 
         file_path = os.path.join(sketch_dir, "temp.ino")
-
+        global file_path
         with open(file_path, "w") as f:
              f.write(code)
 
