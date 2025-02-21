@@ -22,6 +22,7 @@ arduino-cli core update-index
 
 echo "Installing Arduino AVR core..."
 arduino-cli core install arduino:avr
+arduino-cli lib install LiquidCrystal
 
 # Chạy server với gunicorn
 gunicorn -b 0.0.0.0:$PORT Server:app
