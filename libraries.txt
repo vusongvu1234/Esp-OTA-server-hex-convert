@@ -1,4 +1,3 @@
-Wire  
 SPI  
 EEPROM  
 SoftwareSerial  
