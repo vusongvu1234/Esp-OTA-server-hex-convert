@@ -21,7 +21,7 @@ echo "Updating Arduino CLI index..."
 arduino-cli core update-index
 
 echo "Installing Arduino AVR core..."
-arduino-cli core install arduino:av
+arduino-cli core install arduino:avr
 arduino-cli lib install "LiquidCrystal"
 arduino-cli lib install "SPI"
 
